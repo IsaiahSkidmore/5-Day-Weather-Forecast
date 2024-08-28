@@ -21,7 +21,7 @@ class Weather {
     public humidity: number,
     public icon: string,
     public iconDescription: string,
-  ) {}
+  ) { }
 }
 
 // TODO: Complete the WeatherService class
@@ -58,9 +58,8 @@ class WeatherService {
     lat, 
     lon, 
     country, 
-    state
+    state,
    };
-
   return coordinates;
   }
   // TODO: Create buildGeocodeQuery method
@@ -80,14 +79,14 @@ class WeatherService {
   // TODO: Create fetchWeatherData method
   private async fetchWeatherData(coordinates: Coordinates) {
     try {
-      const response = await fetch(this.buildWeatherQuery(coordinates)).then(res => res.json());
+      const response = await fetch(this.buildWeatherQuery(coordinates));
       if (!response.ok) {
         throw new Error("Invalid weather data");
         
       }
-
-      const currentWeather: Weather = this.parseCurrentWeather(response.list[0]);
-      const forecast: Weather[] = this.buildForecastArray(currentWeather, response.list);
+      const data = await response.json();
+      const currentWeather: Weather = this.parseCurrentWeather(data.list[0]);
+      const forecast: Weather[] = this.buildForecastArray(currentWeather, data.list);
       return forecast;
 
     } catch (error) {
@@ -124,7 +123,7 @@ class WeatherService {
     try {
       this.city = city;
       const coordinates = await this.fetchAndDestructureLocationData(city);
-      if (coordinates) {
+      if (coordinates && coordinates.name) {
         this.city = coordinates.name; 
         const weather = await this.fetchWeatherData(coordinates);
         return weather; 

@@ -39,6 +39,7 @@ class HistoryService {
     if (!city) {
       throw new Error("City name is required");
     }
+    
     const newCity = new City(city, uuidv4());
     return await this.getCities().then(cities => {
       if (cities.find(index => index.name === city)) {
@@ -49,8 +50,7 @@ class HistoryService {
     .then(updatedCities => this.write(updatedCities))
     .then(() => newCity);
   }
-  // * BONUS TODO: Define a removeCity method that removes a city from the searchHistory.json file
-  // async removeCity(id: string) {}
+ 
 }
 
 export default new HistoryService();
