@@ -15,15 +15,15 @@ class City {
 class HistoryService {
 
   private async read() {
-    return await fs.readFile("db.json", "utf-8");
+    return await fs.readFile("db/db.json", "utf-8");
   }
 
   private async write(cities: City[]) {
-    return await fs.writeFile("db.json", JSON.stringify(cities, null, 2));
+    return await fs.writeFile("db/db.json", JSON.stringify(cities, null, 2));
   }
 
   async getCities() {
-    const cities = await this.read().then(cities => {
+      return await this.read().then(cities => {
       let parsedCities: City[]
       try {
         parsedCities = [].concat(JSON.parse(cities));
@@ -31,8 +31,9 @@ class HistoryService {
         parsedCities = [];
       }
       return parsedCities;
-    })
-    return cities;
+    });
+
+    
   }
 
   async addCity(city: string) {
